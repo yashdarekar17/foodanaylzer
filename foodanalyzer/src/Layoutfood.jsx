@@ -19,7 +19,7 @@ function Layoutfood (){
     setFoodData(null);
     
     try {
-      const response = await fetch(`http://localhost:7000/foods/search?name=${term}`);
+      const response = await fetch(`https://foodanaylzer.onrender.com/foods/search?name=${term}`);
       if (!response.ok) {
         throw new Error('Food not found');
       }
