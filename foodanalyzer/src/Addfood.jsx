@@ -40,7 +40,7 @@ const Addfood = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:7000/foods/addfoods', {
+      const res = await fetch('https://foodanaylzer.onrender.com/foods/addfoods', {
         method: 'POST',
         body: data,
       });
