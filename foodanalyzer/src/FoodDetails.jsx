@@ -8,7 +8,7 @@ function FoodDetails({ food }) {
         <div className="food-image">
           {food.imageUrl ? (
            <img
-           src={`http://localhost:7000${food.imageUrl}`} // don't add another `/uploads`
+           src={`https://foodanaylzer.onrender.com${food.imageUrl}`} // don't add another `/uploads`
            alt={food.name}
            style={{ width: '300px', height: '300px', objectFit: 'cover' }}
          />
