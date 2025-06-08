@@ -30,9 +30,11 @@ Diet-conscious individuals and families
 Nutritionists and meal planners
 
 🔧 Technology Stack
-Frontend: React.js, HTML/CSS, Tailwind (or custom design)
+Frontend: React.js
 
 Backend: Node.js, Express
+
+Database: Mongodb
 
 Database: MongoDB for storing food items
 
