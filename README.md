@@ -4,13 +4,10 @@
 NutriScan is a smart food analysis platform that empowers users to make informed dietary decisions by analyzing the nutritional composition of food items. Whether you're tracking calories, managing macros, or following a specific diet, NutriScan provides detailed breakdowns to support a healthy lifestyle.
 
 🌟 Key Features:
-📷 Image-Based Analysis: Upload images of food to detect items and retrieve nutritional data.
 
 🔍 Manual Search: Find foods by name and view detailed nutrition facts.
 
 📊 Nutrition Insights: See breakdowns of calories, proteins, carbs, fats, fiber, vitamins, and minerals.
-
-🧠 Smart Recommendations: Suggests healthier alternatives and balanced diet tips.
 
 🛒 Track Multiple Items: Select quantity and get total nutritional value.
 
@@ -23,22 +20,17 @@ NutriScan bridges the gap between food choices and nutritional awareness. It is 
 
 Fitness enthusiasts tracking macros
 
-People managing health conditions like diabetes
+People managing health conditions like diabetes by monitoring food nutrients
 
 Diet-conscious individuals and families
-
-Nutritionists and meal planners
 
 🔧 Technology Stack
 Frontend: React.js
 
 Backend: Node.js, Express
 
-Database: Mongodb
-
 Database: MongoDB for storing food items
 
 Image Uploads: Multer for handling images securely
 
-Payment Integration (optional): Razorpay for premium features
 
