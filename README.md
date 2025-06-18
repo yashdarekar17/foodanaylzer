@@ -33,4 +33,12 @@ Database: MongoDB for storing food items
 
 Image Uploads: Multer for handling images securely
 
+## ⚙️ Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yashdarekar17/Eduskill.git
+   npm run build
+   npm run dev
+
 
