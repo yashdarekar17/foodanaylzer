@@ -37,7 +37,7 @@ Image Uploads: Multer for handling images securely
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yashdarekar17/Eduskill.git
+   git clone https://github.com/yashdarekar17/foodanaylzer.git
    npm run build
    npm run dev
 
