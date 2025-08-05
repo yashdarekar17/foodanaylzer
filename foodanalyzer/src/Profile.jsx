@@ -17,7 +17,7 @@ function Profile() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`http://localhost:7000/foods/user/${userId}`, {
+        const response = await axios.get(`https://foodanaylzer.onrender.com/foods/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

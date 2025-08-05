@@ -14,7 +14,7 @@ const StoreItems = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:7000/foods/userfoods/${userId}`);
+        const response = await axios.get(`https://foodanaylzer.onrender.com/foods/userfoods/${userId}`);
         console.log("Store items fetched:", response.data);
         setFoods(response.data);
       } catch (err) {

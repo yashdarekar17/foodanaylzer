@@ -15,7 +15,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:7000/foods/login", {
+      const response = await axios.post("https://foodanaylzer.onrender.com/foods/login", {
         email,
         Password,
       });
