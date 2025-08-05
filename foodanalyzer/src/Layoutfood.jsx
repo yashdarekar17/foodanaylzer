@@ -87,56 +87,56 @@ function Layoutfood (){
   <div className="healthy-foods-grid">
     
     <div className="healthy-food-card" onClick={() => handleSearch('Avocado')}>
-      <img className="food-image" src={Avocado} alt="Avocado" width="100" />
+      <img className="food-image2" src={Avocado} alt="Avocado" width="100" />
       <h3>Avocado</h3>
       <p className="food-benefits">Rich in healthy monounsaturated fats, fiber, and potassium. Great for heart health and nutrient absorption.</p>
       <div className="food-nutrition-highlight">High in Healthy Fats & Fiber</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Quinoa')}>
-      <img className="food-image" src={quantinia} alt="Quinoa" width="100" />
+      <img className="food-image2" src={quantinia} alt="Quinoa" width="100" />
       <h3>Quinoa</h3>
       <p className="food-benefits">Complete protein containing all essential amino acids. Gluten-free and rich in minerals.</p>
       <div className="food-nutrition-highlight">Complete Protein Source</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Blueberries')}>
-      <img className="food-image" src={blueberry} alt="Blueberries" width="100" />
+      <img className="food-image2" src={blueberry} alt="Blueberries" width="100" />
       <h3>Blueberries</h3>
       <p className="food-benefits">Packed with antioxidants, vitamin C, and fiber. Supports brain health and immune function.</p>
       <div className="food-nutrition-highlight">Antioxidant Powerhouse</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Sweet Potato')}>
-      <img className="food-image" src={Sweet} alt="Sweet Potato" width="100" />
+      <img className="food-image2" src={Sweet} alt="Sweet Potato" width="100" />
       <h3>Sweet Potato</h3>
       <p className="food-benefits">High in beta-carotene, vitamin A, and complex carbohydrates. Supports eye health and immunity.</p>
       <div className="food-nutrition-highlight">Rich in Vitamin A</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Greek Yogurt')}>
-      <img className="food-image" src={greek} alt="Greek Yogurt" width="100" />
+      <img className="food-image2" src={greek} alt="Greek Yogurt" width="100" />
       <h3>Greek Yogurt</h3>
       <p className="food-benefits">High protein content with probiotics for digestive health. Lower in sugar than regular yogurt.</p>
       <div className="food-nutrition-highlight">Protein & Probiotics</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Spinach')}>
-      <img className="food-image" src={spinach} alt="Spinach" width="100" />
+      <img className="food-image2" src={spinach} alt="Spinach" width="100" />
       <h3>Spinach</h3>
       <p className="food-benefits">Loaded with iron, folate, and vitamins K, A, and C. Supports bone health and energy levels.</p>
       <div className="food-nutrition-highlight">Iron & Folate Rich</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Eggs')}>
-      <img className="food-image" src={egg} alt="Eggs" width="100" />
+      <img className="food-image2" src={egg} alt="Eggs" width="100" />
       <h3>Eggs</h3>
       <p className="food-benefits">Excellent source of high-quality animal protein, healthy fats, and essential nutrients like B12 and choline. Often paired with dairy for enhanced nutrition.</p>
       <div className="food-nutrition-highlight">Complete Protein + Brain Nutrients</div>
     </div>
 
     <div className="healthy-food-card" onClick={() => handleSearch('Chicken Yogurt')}>
-      <img className="food-image" src={chicken} alt="Chicken with Yogurt" width="100" />
+      <img className="food-image2" src={chicken} alt="Chicken with Yogurt" width="100" />
       <h3>Chicken with Yogurt</h3>
       <p className="food-benefits">Lean source of protein from chicken, combined with probiotic-rich yogurt to support muscle repair and gut health.</p>
       <div className="food-nutrition-highlight">Lean Protein + Probiotics</div>
@@ -177,7 +177,7 @@ function Layoutfood (){
             <h2 className="section-title">Foods That Help Fight Diseases</h2>
             <div className="expert-suggestions-grid">
               <div className="expert-card">
-                <img className="food-image" src={blueberry} alt="Blueberries" width="100" />
+                <img className="food-image2" src={blueberry} alt="Blueberries" width="100" />
                 <div className="expert-name">Blueberries</div>
                 <div className="expert-title">For Brain Health & Memory</div>
                 <p className="expert-suggestion">
@@ -186,7 +186,7 @@ function Layoutfood (){
               </div>
               
               <div className="expert-card">
-                <img className="food-image" src={salmon} alt="Spinach" width="100" />
+                <img className="food-image2" src={salmon} alt="Spinach" width="100" />
                 <div className="expert-name">Fatty Fish (Salmon)</div>
                 <div className="expert-title">For Heart Disease Prevention</div>
                 <p className="expert-suggestion">
@@ -195,7 +195,7 @@ function Layoutfood (){
               </div>
               
               <div className="expert-card">
-               <img className="food-image" src={vegies} alt="Spinach" width="100" />
+               <img className="food-image2" src={vegies} alt="Spinach" width="100" />
                 <div className="expert-name">Cruciferous Vegetables</div>
                 <div className="expert-title">For Cancer Prevention</div>
                 <p className="expert-suggestion">
@@ -204,7 +204,7 @@ function Layoutfood (){
               </div>
               
               <div className="expert-card">
-                <img className="food-image" src={leafy} alt="Spinach" width="100" />
+                <img className="food-image2" src={leafy} alt="Spinach" width="100" />
                 <div className="expert-name">Leafy Greens</div>
                 <div className="expert-title">For Diabetes Management</div>
                 <p className="expert-suggestion">
@@ -213,7 +213,7 @@ function Layoutfood (){
               </div>
               
               <div className="expert-card">
-                <img className="food-image" src={nuts} alt="Spinach" width="100" />
+                <img className="food-image2" src={nuts} alt="Spinach" width="100" />
                 <div className="expert-name">Nuts & Seeds</div>
                 <div className="expert-title">For Cholesterol Control</div>
                 <p className="expert-suggestion">
@@ -222,7 +222,7 @@ function Layoutfood (){
               </div>
               
               <div className="expert-card">
-                <img className="food-image" src={tomatoes} alt="Spinach" width="100" />
+                <img className="food-image2" src={tomatoes} alt="Spinach" width="100" />
                 <div className="expert-name">Tomatoes</div>
                 <div className="expert-title">For Prostate Health</div>
                 <p className="expert-suggestion">
@@ -231,7 +231,7 @@ function Layoutfood (){
               </div>
 
               <div className="expert-card">
-         <img className="food-image" src={garlic} alt="Spinach" width="100" />
+         <img className="food-image2" src={garlic} alt="Spinach" width="100" />
         <div className="expert-name">Garlic</div>
      <div className="expert-title">For Immune Support</div>
   <p className="expert-suggestion">
@@ -240,7 +240,7 @@ function Layoutfood (){
 </div>
 
 <div className="expert-card">
-  <img className="food-image" src={carrots} alt="Spinach" width="100" />
+  <img className="food-image2" src={carrots} alt="Spinach" width="100" />
   <div className="expert-name">Carrots</div>
   <div className="expert-title">For Eye Health</div>
   <p className="expert-suggestion">
