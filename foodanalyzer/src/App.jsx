@@ -7,6 +7,11 @@ import Addfood from "./Addfood";
 import About from "./About";
 import Contact from "./Contact";
 import ImageUploader from "./Imageuploader";
+import Login from "./loginsignup/Login";
+import Signup from "./loginsignup/SIgnup";
+import StoreFood from "./Storeitems";
+import Profile from "./Profile";
+
 
 function App() {
   const [data, setdata] = useState();
@@ -20,6 +25,11 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/image" element={<ImageUploader />} />
+        <Route path="/Login" element={<Login/>}/>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/storefood" element={<StoreFood/>} />
+        <Route path="/Profile" element={<Profile/>}/>
+        {/* <Route path="/Imageanalyzer" element={<ChatBox/>}/> */}
       </Routes>
     </BrowserRouter>
   );

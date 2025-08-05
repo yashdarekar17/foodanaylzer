@@ -16,7 +16,8 @@ const foodSchema = new mongoose.Schema({
     },
     carbohydrates: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     fat: {
         type: Number,
@@ -56,7 +57,13 @@ const foodSchema = new mongoose.Schema({
         type: String,
         enum: ['fruits', 'vegetables', 'grains', 'proteins', 'dairy', 'other'],
         default: 'other'
-    }
+    },
+    userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
+
 });
 
 const Food = mongoose.model('Food', foodSchema);

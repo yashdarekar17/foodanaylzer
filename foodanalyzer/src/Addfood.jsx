@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../Store/Foodslice';
 import './App.css';
 
 const Addfood = () => {
@@ -19,7 +21,7 @@ const Addfood = () => {
     category: 'other',
     imageUrl: null,
   });
-
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'imageUrl') {
@@ -38,6 +40,13 @@ const Addfood = () => {
         data.append(key, formData[key]);
       }
     }
+   const userId = localStorage.getItem('userId');
+    if(!userId){
+      alert('please login first');
+      return;
+    }
+
+    data.append('userId',userId);
 
     try {
       const res = await fetch('https://foodanaylzer.onrender.com/foods/addfoods', {
@@ -46,11 +55,13 @@ const Addfood = () => {
       });
 
       const result = await res.json();
-
       if (!res.ok) throw new Error(result.message || 'Upload failed');
 
-      alert('Food added successfully!');
+      alert('Item added successfully!');
       console.log(result);
+
+      // Dispatch to Redux store
+      dispatch(addItem(result)); // assuming your backend returns the saved item
 
       setFormData({
         name: '',
@@ -69,7 +80,7 @@ const Addfood = () => {
       });
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Error adding food');
+      alert('Error adding item');
     }
   };
 
