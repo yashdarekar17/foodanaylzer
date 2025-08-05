@@ -78,6 +78,7 @@ h1 {
 /* Navigation links (default: horizontal) */
 .nav-links {
   display: flex;
+  gap: 20px;
   justify-content: space-between;
   list-style: none;
 }
