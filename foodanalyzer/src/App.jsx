@@ -8,7 +8,7 @@ import About from "./About";
 import Contact from "./Contact";
 import ImageUploader from "./Imageuploader";
 import Login from "./loginsignup/Login";
-import Signup from "./loginsignup/SIgnup";
+import Signup from "./loginsignup/Signin"
 import StoreFood from "./Storeitems";
 import Profile from "./Profile";
 
