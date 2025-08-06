@@ -63,7 +63,10 @@ function Navbar() {
               <div className="dropdown-menu">
                 <Link to="/profile" onClick={() => setShowDropdown(false)}>Profile</Link>
                 <Link to="/storefood" onClick={() => setShowDropdown(false)}>Stored Food</Link>
+                <Link to="/bot" onClick={() => setShowDropdown(false)}>Nutribot</Link>
                 <button onClick={handleLogout}>Logout</button>
+                
+               
               </div>
             )}
           </div>

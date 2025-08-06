@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import SearchBar from './Searchbar';
@@ -81,6 +82,11 @@ function Layoutfood (){
             </div>
           </div>
         )}
+
+        <section className='bot-container'>
+          <p className='bot-text'>Want to use our NutribotAI for detail food analysis? just click below</p>
+          <button className='food-nutrition-highlight2'><Link to="/bot">Nutribot</Link></button>
+        </section>
                {/* New Popular Healthy Foods Section */}
          <section className="healthy-foods-section">
   <h2 className="section-title">Popular Healthy Foods</h2>

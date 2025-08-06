@@ -11,6 +11,7 @@ import Login from "./loginsignup/Login";
 import Signup from "./loginsignup/Signin"
 import StoreFood from "./Storeitems";
 import Profile from "./Profile";
+import Chatbot from "./Chatbox";
 
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/storefood" element={<StoreFood/>} />
         <Route path="/Profile" element={<Profile/>}/>
-        {/* <Route path="/Imageanalyzer" element={<ChatBox/>}/> */}
+        <Route path="/bot" element={<Chatbot/>}/>
       </Routes>
     </BrowserRouter>
   );

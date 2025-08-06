@@ -681,7 +681,7 @@ h1 {
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color:whitesmoke;
 }
 
 .login-button a {
@@ -1774,3 +1774,62 @@ a{
   object-fit: cover;
   margin-bottom: 10px;
 }
+
+.bot{
+  margin: 10px;
+}
+
+.bot-container{
+  margin-top: 50px;
+  font-size: large;
+  color: #4a5568;
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 50px;
+  
+}
+.btn5 {
+  margin-top: 12px;
+  background-color: rgb(0, 51, 0); /* Bootstrap green */
+  color: white;
+  width: 100px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn5:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.login-button2 {
+  margin: 10px;
+    color: whitesmoke;
+  background-color: #044512;
+
+  padding: 12px 24px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.food-nutrition-highlight2{
+   background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+   border: none;
+   width: 150px;
+   height: 40px;
+   padding: 0.5rem;
+          border-radius: 8px;
+          margin-top: 1rem;
+          font-size: 0.9rem;
+          color: #1b5e20;
+          font-weight: 500;
+}
+
