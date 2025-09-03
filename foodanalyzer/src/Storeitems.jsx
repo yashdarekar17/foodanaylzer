@@ -49,7 +49,7 @@ const StoreItems = () => {
             >
               <div className="food-header">
                 <img
-                  src={`http://localhost:7000${food.imageUrl}`}
+                  src={`https://foodanaylzer.onrender.com/${food.imageUrl}`}
                   alt={food.name || "Food"}
                   className="food-image2"
                 />
