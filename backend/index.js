@@ -6,8 +6,12 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// 1. UPDATE CORS: Allow your specific Vercel URL
+app.use(cors({
+  origin: ["http://localhost:5173", "https://your-food-app.vercel.app"],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,22 +20,26 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-// API routes - put these BEFORE static and catch-all
+// API routes
 const foodRoutes = require('./routes/foodroutes');
 app.use('/foods', foodRoutes);
 
-// Serve uploads folder
+// Serve uploads folder (Used for images)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve frontend static files
+// --- REMOVE OR COMMENT OUT THE FRONTEND SERVING CODE BELOW ---
+/*
 app.use(express.static(path.join(__dirname, '..', 'foodanalyzer', 'dist')));
-
-// SPA fallback: serve index.html for any unknown route (after API routes)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'foodanalyzer', 'dist', 'index.html'));
 });
+*/
 
-// Start server
+// 2. Add a simple root route for health checks
+app.get("/", (req, res) => {
+  res.send("Food Analyzer API is running...");
+});
+
 const PORT = process.env.PORT || 7000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
