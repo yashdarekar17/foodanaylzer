@@ -8,7 +8,7 @@ const app = express();
 
 // 1. UPDATE CORS: Allow your specific Vercel URL
 app.use(cors({
-  origin: ["http://localhost:5173", "https://your-food-app.vercel.app"],
+  origin: ["http://localhost:5173", "https://nutri-scan-app.vercel.app"],
   credentials: true
 }));
 

@@ -14,7 +14,7 @@ const StoreItems = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://foodanaylzer.onrender.com/foods/userfoods/${userId}`);
+        const response = await axios.get(`https://foodanaylzer-1.onrender.com/foods/userfoods/${userId}`);
         console.log("Store items fetched:", response.data);
         setFoods(response.data);
       } catch (err) {
@@ -49,7 +49,7 @@ const StoreItems = () => {
             >
               <div className="food-header">
                 <img
-                  src={`https://foodanaylzer.onrender.com/${food.imageUrl}`}
+                  src={`https://foodanaylzer-1.onrender.com/${food.imageUrl}`}
                   alt={food.name || "Food"}
                   className="food-image2"
                 />

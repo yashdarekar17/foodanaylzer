@@ -13,7 +13,7 @@ function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://foodanaylzer.onrender.com/foods/signup', {
+      const response = await axios.post('https://foodanaylzer-1.onrender.com/foods/signup', {
         name,
         email,
         Password,

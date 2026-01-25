@@ -4,7 +4,7 @@ import axios from "axios";
 
 // Get all items
 export const fetchItems = createAsyncThunk('foods/fetchUserFoods', async (userId) => {
-  const response = await axios.get(`http://localhost:7000/foods/userfoods/${userId}`);
+  const response = await axios.get(`https://foodanaylzer-1.onrender.com/foods/userfoods/${userId}`);
   return response.data;
 });
 
@@ -16,7 +16,7 @@ export const addItem = createAsyncThunk("items/add", async (formData,userId) => 
       data.append(key,formData[key]);
     }
   }
-    const response = await axios.post("http://localhost:7000/foods/addfoods", data, {
+  const response = await axios.post("https://foodanaylzer-1.onrender.com/foods/addfoods", data, {
     headers: {
       "Content-Type": "multipart/form-data", // ✅ Important for FormData
     },

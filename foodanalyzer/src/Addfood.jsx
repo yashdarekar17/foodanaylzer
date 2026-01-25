@@ -49,7 +49,7 @@ const Addfood = () => {
     data.append('userId',userId);
 
     try {
-      const res = await fetch('https://foodanaylzer.onrender.com/foods/addfoods', {
+      const res = await fetch('https://foodanaylzer-1.onrender.com/foods/addfoods', {
         method: 'POST',
         body: data,
       });

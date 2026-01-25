@@ -16,7 +16,7 @@ function ImageUploader() {
     formData.append('image', image);
 
     try {
-      const res = await axios.post('http://localhost:5000/upload', formData, {
+      const res = await axios.post('https://foodanaylzer-1.onrender.com/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
