@@ -2,14 +2,33 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import "./App.css";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
+const GOALS = [
+  { value: 'weight_loss',      label: 'Weight Loss' },
+  { value: 'weight_gain',      label: 'Weight Gain' },
+  { value: 'muscle_building',  label: 'Muscle Building' },
+  { value: 'maintenance',      label: 'Maintenance (No specific goal)' },
+];
+
+const CONDITIONS = [
+  { value: 'diabetes',             label: 'Diabetes' },
+  { value: 'high_bp',              label: 'High Blood Pressure' },
+  { value: 'lactose_intolerance',  label: 'Lactose Intolerance' },
+  { value: 'cholesterol',          label: 'High Cholesterol' },
+];
 
 function Profile() {
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({});
+  const [isEditingHealth, setIsEditingHealth] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [goal, setGoal] = useState('maintenance');
+  const [conditions, setConditions] = useState([]);
+  const [healthSaving, setHealthSaving] = useState(false);
+  const [healthSaved, setHealthSaved] = useState(false);
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
@@ -17,13 +36,15 @@ function Profile() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`https://foodanaylzer-1.onrender.com/foods/user/${userId}`, {
+        const response = await axios.get(`/foods/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setUser(response.data);
         setEditedUser(response.data);
+        setGoal(response.data.goal || 'maintenance');
+        setConditions(response.data.conditions || []);
       } catch (err) {
         console.error("Fetch error:", err.response?.data || err.message);
       }
@@ -43,254 +64,369 @@ function Profile() {
   const handleSave = () => {
     setUser({ ...editedUser });
     setIsEditing(false);
-    // Here you would typically make an API call to update user data
   };
+
+  const toggleCondition = (val) => {
+    setConditions(prev =>
+      prev.includes(val) ? prev.filter(c => c !== val) : [...prev, val]
+    );
+    setHealthSaved(false);
+  };
+
+  const saveHealthProfile = async () => {
+    setHealthSaving(true);
+    try {
+      await axios.patch(`/foods/profile/onboarding/${userId}`, { 
+        age: editedUser.age,
+        gender: editedUser.gender || 'male',
+        weight: editedUser.weight,
+        heightInput: editedUser.heightInput || editedUser.height,
+        activity: editedUser.activity || 'moderate',
+        goal,
+        conditions 
+      });
+      setUser({ ...user, ...editedUser, goal, conditions });
+      setIsEditingHealth(false);
+      setHealthSaved(true);
+    } catch (err) {
+      console.error('Health profile save error:', err);
+      alert('Failed to save health profile. Please try again.');
+    } finally {
+      setHealthSaving(false);
+    }
+  };
+
 
   const handleCancel = () => {
     setEditedUser({ ...user });
     setIsEditing(false);
   };
 
-  const StatCard = ({ title, value }) => (
-    <div className="profile-stats-card">
-      <div className="profile-stats-content">
-        <div className="profile-stats-text">
-          <h4>{title}</h4>
-          <p className="profile-stats-value">{value}</p>
-        </div>
-        <div className="profile-stats-icon-container">
-          <svg className="profile-stats-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-          </svg>
-        </div>
+  const handleCancelHealth = () => {
+    setEditedUser({ ...user });
+    setIsEditingHealth(false);
+  };
+
+  const StatCard = ({ title, value, icon, colorClass }) => (
+    <div className={`bg-surface-container-lowest rounded-3xl p-6 shadow-sm border border-outline-variant/30 flex items-center gap-6`}>
+      <div className={`w-14 h-14 rounded-full flex items-center justify-center ${colorClass}`}>
+        <span className="material-symbols-outlined text-3xl">{icon}</span>
+      </div>
+      <div>
+        <p className="text-sm font-bold text-on-surface-variant uppercase tracking-widest mb-1">{title}</p>
+        <p className="text-3xl font-heading font-black">{value}</p>
       </div>
     </div>
   );
 
   return (
-    <>
+    <div className="bg-surface min-h-screen text-on-surface flex flex-col font-body">
       <Navbar />
-      
-      {/* Modern Profile Section */}
-      <div className="profile-page-container">
-        <div className="profile-main-container">
-          {/* Profile Header */}
-          <div className="profile-header-card">
-            <div className="profile-header-gradient"></div>
-            <div className="profile-header-content">
-              <div className="profile-header-flex">
-                {/* Profile Avatar */}
-                <div className="profile-avatar-container">
-                  <div className="profile-avatar">
-                    {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-                  </div>
-                  <button className="profile-camera-btn">
-                    <svg className="profile-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </button>
-                </div>
-                
-                {/* Profile Info */}
-                <div className="profile-info-section">
-                  {isEditing ? (
-                    <div className="profile-edit-inputs">
-                      <input
-                        type="text"
-                        value={editedUser.name || ""}
-                        onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
-                        className="profile-name-input"
-                        placeholder="Enter your name"
-                      />
-                      <input
-                        type="email"
-                        value={editedUser.email || ""}
-                        onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
-                        className="profile-email-input"
-                        placeholder="Enter your email"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <h1 className="profile-name-display">{user.name || "User"}</h1>
-                      <p className="profile-email-display">
-                        <svg className="profile-email-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        {user.email || "No email provided"}
-                      </p>
-                    </div>
-                  )}
-                </div>
-                 
-                {/* Action Buttons */}
-                <div className="profile-actions">
-                  {isEditing ? (
-                    <>
-                      <button
-                        onClick={handleSave}
-                        className="profile-btn profile-btn-green"
-                      >
-                        <svg className="profile-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                        </svg>
-                        <span>Save</span>
-                      </button>
-                      <button
-                        onClick={handleCancel}
-                        className="profile-btn profile-btn-gray"
-                      >
-                        <svg className="profile-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <span>Cancel</span>
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => setIsEditing(true)}
-                      className="profile-btn profile-btn-green"
-                    >
-                      <svg className="profile-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      <span>Edit Profile</span>
-                    </button>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    className="profile-btn profile-btn-red"
-                  >
-                    <svg className="profile-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    <span>Logout</span>
-                  </button>
-                </div>
+
+      <main className="flex-grow pt-32 pb-24 px-8 max-w-[95vw] mx-auto w-full">
+        {/* Profile Header */}
+        <div className="relative bg-surface-container-lowest rounded-[3rem] p-8 md:p-12 mb-12 overflow-hidden shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center gap-10">
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary-fixed/30 rounded-full blur-[100px] -z-10"></div>
+
+          {/* Avatar Base */}
+          <div className="relative group">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-primary text-on-primary flex items-center justify-center text-5xl font-heading font-bold shadow-xl border-4 border-surface overflow-hidden">
+              {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+            </div>
+            <button className="absolute bottom-2 right-2 w-10 h-10 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+              <span className="material-symbols-outlined text-lg">photo_camera</span>
+            </button>
+          </div>
+
+          <div className="flex-grow text-center md:text-left">
+            {isEditing ? (
+              <div className="space-y-4 max-w-sm">
+                <input
+                  type="text"
+                  value={editedUser.name || ""}
+                  onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                  className="w-full bg-surface-container-high border border-outline/30 rounded-xl px-4 py-3 font-heading font-bold text-2xl"
+                />
+                <input
+                  type="email"
+                  value={editedUser.email || ""}
+                  onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                  className="w-full bg-surface-container-high border border-outline/30 rounded-xl px-4 py-3"
+                />
               </div>
-            </div>
+            ) : (
+              <div>
+                <h1 className="text-4xl md:text-5xl font-heading font-black mb-2">{user.name || "User"}</h1>
+                <p className="text-on-surface-variant flex items-center justify-center md:justify-start gap-2 font-medium">
+                  <span className="material-symbols-outlined text-sm">mail</span>
+                  {user.email || "No email provided"}
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Stats Card - Only Foods Added */}
-          <div className="profile-stats-container">
-            <StatCard
-              title="Foods Added"
-              value={user?.foods?.length || 0}
-            />
-          </div>
-
-          {/* Tabs */}
-          <div className="profile-tabs-card">
-            <div className="profile-tabs-nav">
-              {['overview', 'activity', 'settings'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`profile-tab-btn ${activeTab === tab ? 'active' : ''}`}
-                >
-                  {tab}
+          <div className="flex flex-col sm:flex-row gap-4 shrink-0 mt-6 md:mt-0">
+            {isEditing ? (
+              <>
+                <button onClick={handleCancel} className="px-6 py-3 rounded-xl border border-outline hover:bg-surface-container transition-colors font-bold">Cancel</button>
+                <button onClick={handleSave} className="px-6 py-3 rounded-xl bg-primary text-on-primary hover:bg-primary/90 transition-colors font-bold shadow-md">Save Changes</button>
+              </>
+            ) : (
+              <>
+                <button onClick={() => setIsEditing(true)} className="px-6 py-3 rounded-xl border border-outline hover:bg-surface-container transition-colors font-bold flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[20px]">edit</span> Edit
                 </button>
-              ))}
-            </div>
+                <button onClick={handleLogout} className="px-6 py-3 rounded-xl bg-error-container text-on-error-container hover:bg-error-container/80 transition-colors font-bold shadow-md flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[20px]">logout</span> Logout
+                </button>
+              </>
+            )}
+          </div>
+        </div>
 
-            <div className="profile-tabs-content">
+        {/* Stats Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <StatCard
+            title="Foods Analyzed"
+            value={user?.foods?.length || 0}
+            icon="query_stats"
+            colorClass="bg-secondary-container/50 text-on-secondary-container"
+          />
+          <StatCard
+            title="Active Streaks"
+            value="3 Days"
+            icon="local_fire_department"
+            colorClass="bg-error-container/50 text-error"
+          />
+          <StatCard
+            title="Health Score"
+            value="85/100"
+            icon="health_and_safety"
+            colorClass="bg-primary-fixed/50 text-primary"
+          />
+        </div>
+
+        {/* Tabs Content */}
+        <div className="bg-surface-container-lowest rounded-[3rem] p-8 md:p-12 shadow-sm border border-outline-variant/30 min-h-[400px]">
+          <div className="flex gap-8 border-b border-surface-container-high mb-8 overflow-x-auto hide-scrollbar">
+            {['overview', 'health', 'activity', 'settings'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`pb-4 capitalize font-heading font-bold text-lg whitespace-nowrap transition-colors border-b-2 ${activeTab === tab ? 'border-primary text-primary' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
+              >
+                {tab === 'health' ? 'Health Profile' : tab}
+              </button>
+            ))}
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
               {activeTab === 'overview' && (
-                <div className="profile-overview-section">
-                  <h3 className="profile-overview-title">Account Overview</h3>
-                  <div className="profile-overview-grid">
-                    <div className="profile-overview-column">
-                      <div className="profile-info-row">
-                        <span className="profile-info-label">Full Name</span>
-                        <span className="profile-info-value">{user.name || "Not provided"}</span>
+                <div className="space-y-8">
+                  <h3 className="text-2xl font-heading font-bold mb-6">Account Overview</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div className="bg-surface-container p-6 rounded-2xl">
+                        <p className="text-sm font-bold text-on-surface-variant mb-1">Full Name</p>
+                        <p className="text-lg font-medium">{user.name || "Not provided"}</p>
                       </div>
-                      <div className="profile-info-row">
-                        <span className="profile-info-label">Email Address</span>
-                        <span className="profile-info-value">{user.email || "Not provided"}</span>
-                      </div>
-                    </div>
-                    <div className="profile-overview-column">
-                      <div className="profile-info-row">
-                        <span className="profile-info-label">Foods Added</span>
-                        <span className="profile-info-value highlight">{user.foods?.length || 0}</span>
+                      <div className="bg-surface-container p-6 rounded-2xl">
+                        <p className="text-sm font-bold text-on-surface-variant mb-1">Email Address</p>
+                        <p className="text-lg font-medium">{user.email || "Not provided"}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
 
+              {activeTab === 'health' && (
+                <div className="space-y-8 max-w-lg">
+                  {/* Basic Health Stats */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div>
+                      <h3 className="text-2xl font-heading font-bold mb-2">Health Profile</h3>
+                      <p className="text-on-surface-variant">Personalized food risk metrics.</p>
+                    </div>
+                    {!isEditingHealth && (
+                      <button onClick={() => { setEditedUser({...user}); setIsEditingHealth(true); }} className="px-5 py-2 rounded-xl border border-outline hover:bg-surface-container transition-colors font-bold flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Age</label>
+                      {isEditingHealth ? (
+                        <input
+                          type="number"
+                          value={editedUser.age || ""}
+                          onChange={(e) => setEditedUser({ ...editedUser, age: e.target.value })}
+                          className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-3"
+                        />
+                      ) : (
+                        <p className="text-lg font-bold px-4 py-3 bg-surface-container/30 rounded-xl">{user.age || "--"}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Weight (kg)</label>
+                      {isEditingHealth ? (
+                        <input
+                          type="number"
+                          value={editedUser.weight || ""}
+                          onChange={(e) => setEditedUser({ ...editedUser, weight: e.target.value })}
+                          className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-3"
+                        />
+                      ) : (
+                        <p className="text-lg font-bold px-4 py-3 bg-surface-container/30 rounded-xl">{user.weight || "--"} kg</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mb-6">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Height (e.g. 5'11" or 175cm)</label>
+                    {isEditingHealth ? (
+                      <input
+                        type="text"
+                        value={editedUser.heightInput !== undefined ? editedUser.heightInput : (user.height || "")}
+                        onChange={(e) => setEditedUser({ ...editedUser, heightInput: e.target.value })}
+                        className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-3"
+                      />
+                    ) : (
+                      <p className="text-lg font-bold px-4 py-3 bg-surface-container/30 rounded-xl">{user.heightInput || user.height || "--"}</p>
+                    )}
+                  </div>
+
+                  <div className="mb-6">
+                    <label className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Activity Level</label>
+                    {isEditingHealth ? (
+                      <select
+                        value={editedUser.activity || "moderate"}
+                        onChange={(e) => setEditedUser({ ...editedUser, activity: e.target.value })}
+                        className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-3"
+                      >
+                        <option value="sedentary">Sedentary (Little/no exercise)</option>
+                        <option value="light">Light (1-3 days/week)</option>
+                        <option value="moderate">Moderate (3-5 days/week)</option>
+                        <option value="active">Active (6-7 days/week)</option>
+                        <option value="very_active">Very Active (Daily intense)</option>
+                      </select>
+                    ) : (
+                      <p className="text-lg font-bold px-4 py-3 bg-surface-container/30 rounded-xl capitalize">{user.activity || "Moderate"}</p>
+                    )}
+                  </div>
+
+                  <div className="mb-6">
+                    <label className="block text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-2">Fitness Goal</label>
+                    <select
+                      value={goal}
+                      onChange={(e) => { setGoal(e.target.value); setHealthSaved(false); }}
+                      className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-3.5 text-on-surface font-medium focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                    >
+                      {GOALS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="mb-8">
+                    <label className="block text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-2">Health Conditions</label>
+                    <input
+                      type="text"
+                      value={conditions[0] || ''}
+                      onChange={(e) => { setConditions(e.target.value ? [e.target.value] : []); setHealthSaved(false); }}
+                      placeholder="e.g. diabetes, high blood pressure, thyroid…"
+                      className="w-full bg-surface-container border border-outline-variant/30 rounded-xl px-4 py-3.5 text-on-surface font-medium placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                    />
+                  </div>
+
+                  {isEditingHealth && (
+                    <div className="flex gap-4">
+                      <button onClick={handleCancelHealth} className="px-6 py-4 border border-outline rounded-2xl font-bold text-base hover:bg-surface-container transition-all">Cancel</button>
+                      <button onClick={saveHealthProfile} disabled={healthSaving} className="px-8 py-4 bg-primary text-on-primary rounded-2xl font-bold text-base hover:bg-primary/90 transition-all disabled:opacity-60 shadow-md shadow-primary/20 flex-grow">
+                        {healthSaving ? 'Saving…' : 'Save Health Profile'}
+                      </button>
+                    </div>
+                  )}
+                  
+                  {!isEditingHealth && healthSaved && (
+                    <div className="flex items-center gap-2 text-primary font-bold bg-primary/10 px-4 py-2 rounded-xl w-fit">
+                      <span className="material-symbols-outlined text-[18px]">check_circle</span> Health Profile Updated
+                    </div>
+                  )}
+                </div>
+              )}
+
+
               {activeTab === 'activity' && (
-                <div>
-                  <h3 className="profile-overview-title">Recent Activity</h3>
+                <div className="space-y-8">
+                  <h3 className="text-2xl font-heading font-bold mb-6">Recent Activity</h3>
                   {user.foods && user.foods.length > 0 ? (
-                    <div className="profile-activity-list">
+                    <div className="space-y-4">
                       {user.foods.slice(0, 5).map((food, index) => (
-                        <div key={index} className="profile-activity-item">
-                          <div className="profile-activity-icon-container">
-                            <svg className="profile-activity-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                            </svg>
+                        <div key={index} className="flex items-center justify-between p-6 bg-surface-container rounded-2xl hover:bg-surface-container-high transition-colors">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
+                              <span className="material-symbols-outlined">tapas</span>
+                            </div>
+                            <div>
+                              <p className="font-bold">Analyzed Food Item</p>
+                              <p className="text-sm text-on-surface-variant">Viewed nutritional breakdown</p>
+                            </div>
                           </div>
-                          <div className="profile-activity-content">
-                            <p className="profile-activity-title">Added food item</p>
-                            <p className="profile-activity-time">Food analysis completed</p>
-                          </div>
+                          <button className="text-primary font-bold text-sm bg-primary/10 px-4 py-2 rounded-full">View</button>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="profile-no-activity">
-                      <svg className="profile-no-activity-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                      </svg>
-                      <p>No food items added yet</p>
+                    <div className="text-center py-16 text-on-surface-variant">
+                      <span className="material-symbols-outlined text-6xl mb-4 opacity-50">hourglass_empty</span>
+                      <p className="text-lg font-medium">No recent activity yet.</p>
+                      <button onClick={() => navigate('/')} className="mt-4 px-6 py-2 bg-primary text-on-primary rounded-full font-bold">Start Scanning</button>
                     </div>
                   )}
                 </div>
               )}
 
               {activeTab === 'settings' && (
-                <div>
-                  <h3 className="profile-overview-title">Account Settings</h3>
-                  <div className="profile-settings-section">
-                    <label className="profile-settings-label">
-                      Email Notifications
-                    </label>
-                    <div className="profile-checkbox-group">
-                      <label className="profile-checkbox-item">
-                        <input type="checkbox" className="profile-checkbox" defaultChecked />
-                        <span className="profile-checkbox-label">Analysis completion notifications</span>
+                <div className="space-y-10">
+                  <div>
+                    <h3 className="text-2xl font-heading font-bold mb-6">Email Notifications</h3>
+                    <div className="space-y-4">
+                      <label className="flex items-center gap-4 cursor-pointer p-4 bg-surface-container rounded-xl">
+                        <input type="checkbox" className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" defaultChecked />
+                        <span className="font-medium">Analysis completion notifications</span>
                       </label>
-                      <label className="profile-checkbox-item">
-                        <input type="checkbox" className="profile-checkbox" />
-                        <span className="profile-checkbox-label">Weekly food reports</span>
+                      <label className="flex items-center gap-4 cursor-pointer p-4 bg-surface-container rounded-xl">
+                        <input type="checkbox" className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" />
+                        <span className="font-medium">Weekly food reports sent to {user.email}</span>
                       </label>
                     </div>
                   </div>
-                  <div className="profile-settings-section">
-                    <label className="profile-settings-label">
-                      Privacy Settings
-                    </label>
-                    <div className="profile-checkbox-group">
-                      <label className="profile-checkbox-item">
-                        <input type="checkbox" className="profile-checkbox" defaultChecked />
-                        <span className="profile-checkbox-label">Make profile public</span>
-                      </label>
-                      <label className="profile-checkbox-item">
-                        <input type="checkbox" className="profile-checkbox" defaultChecked />
-                        <span className="profile-checkbox-label">Share analysis data for research</span>
+
+                  <div>
+                    <h3 className="text-2xl font-heading font-bold mb-6">Privacy</h3>
+                    <div className="space-y-4">
+                      <label className="flex items-center gap-4 cursor-pointer p-4 bg-surface-container rounded-xl">
+                        <input type="checkbox" className="w-5 h-5 rounded text-primary focus:ring-primary" defaultChecked />
+                        <span className="font-medium">Make profile analytics visible to community</span>
                       </label>
                     </div>
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </div>
-      
+      </main>
+
       <Footer />
-    </>
+    </div>
   );
 }
 

@@ -14,12 +14,26 @@ const Userschema = new mongoose.Schema({
     Password:{
         type: String,
         required:true,
-        unique:true,
     },
-    Foods:[{
-       type: mongoose.Schema.Types.ObjectId,
-       ref:'Food'
-    }]
+    goal: {
+        type: String,
+        enum: ['weight_loss', 'weight_gain', 'maintain', 'maintenance', 'muscle_building'],
+        default: 'maintenance'
+    },
+    age: { type: Number },
+    gender: { type: String, enum: ['male', 'female'] },
+    height: { type: Number }, // in cm
+    weight: { type: Number }, // in kg
+    activity: { 
+        type: String, 
+        enum: ['sedentary', 'light', 'moderate', 'active', 'very_active'],
+        default: 'sedentary'
+    },
+    isProfileComplete: { type: Boolean, default: false },
+    conditions: {
+        type: [String],
+        default: []
+    }
 })
 
 Userschema.pre('save',async function(next){

@@ -1,11 +1,8 @@
-
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import profileuser from "./foodimage/profileuser.png"
-import "./App.css";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import profileuser from "./foodimage/profileuser.png";
 
 function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
@@ -15,8 +12,6 @@ function Navbar() {
     setIsLoggedIn(loggedIn);
   }, []);
 
-
-
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("useremail");
@@ -24,57 +19,56 @@ function Navbar() {
     navigate("/");
   };
 
-    
-  const userInitial =localStorage.getItem("useremail")
-    ? localStorage.getItem("useremail")[0].toUpperCase()
-    : "U";
-
   return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <div className="logo">NutriScan</div>
-
-        <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="white">
-              <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7a1 1 0 1 0-1.41 1.42L10.59 12l-4.89 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/>
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="white">
-              <path d="M4 6h16M4 12h16M4 18h16" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          )}
+    <nav className="fixed top-0 w-full z-50 bg-[#f9faf6]/80 backdrop-blur-xl shadow-[0_24px_48px_-12px_rgba(26,28,26,0.06)]">
+      <div className="relative flex justify-between items-center px-8 py-4 max-w-[95vw] mx-auto">
+        <div className="text-2xl font-bold tracking-tighter text-[#154212] font-heading">
+          <Link to="/">NutriScan</Link>
         </div>
 
-        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <li><Link to="/About" onClick={() => setMenuOpen(false)}>About</Link></li>
-          <li><Link to="/Contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
-          <li><Link to="/addfood" onClick={() => setMenuOpen(false)}>Add the food</Link></li>
-          {/* <li><Link to="/Imageanalyzer"onClick={() => setMenuOpen(false)}>Image analyzer</Link></li> */}
-        </ul>
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 font-heading text-sm tracking-tight">
+          {[
+            { path: "/", label: "Home" },
+            { path: "/About", label: "About" },
+            { path: "/Contact", label: "Contact" },
+            { path: "/insights", label: "Insights" }
+          ].map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `transition-transform duration-300 ease-out ${isActive
+                  ? "text-[#154212] font-semibold border-b-2 border-[#154212] pb-1"
+                  : "text-[#42493e] hover:text-[#154212] hover:scale-105"
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </div>
 
-        {isLoggedIn ? (
-          <div className="profile-container">
-            <div className="profile-circle" onClick={() => setShowDropdown(!showDropdown)}>
-              <span><img  className="profile-circle"  src={profileuser} alt="" srcset="" /></span>
+        <div className="flex items-center gap-4">
+          {isLoggedIn ? (
+            <div className="relative">
+              <button onClick={() => setShowDropdown(!showDropdown)} className="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden hover:scale-105 transition-transform">
+                <img src={profileuser} className="w-full h-full object-cover" alt="Profile" />
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-surface-container-lowest rounded-xl shadow-lg border-outline-variant/20 border p-2 flex flex-col">
+                  <Link to="/profile" className="px-4 py-2 hover:bg-surface-container-low rounded-lg text-sm text-on-surface">Profile</Link>
+                  <Link to="/bot" className="px-4 py-2 hover:bg-surface-container-low rounded-lg text-sm text-on-surface">Nutribot</Link>
+                  <button onClick={handleLogout} className="px-4 py-2 hover:bg-surface-container-low rounded-lg text-sm text-left text-error">Logout</button>
+                </div>
+              )}
             </div>
-            {showDropdown && (
-              <div className="dropdown-menu">
-                <Link to="/profile" onClick={() => setShowDropdown(false)}>Profile</Link>
-                <Link to="/storefood" onClick={() => setShowDropdown(false)}>Stored Food</Link>
-                <Link to="/bot" onClick={() => setShowDropdown(false)}>Nutribot</Link>
-                <button onClick={handleLogout}>Logout</button>
-                
-               
-              </div>
-            )}
-          </div>
-        ) : (
-          <button className="login-button">
-            <Link to="/Login">Login</Link>
-          </button>
-        )}
+          ) : (
+            <>
+              <Link to="/Login" className="hidden md:block px-6 py-2.5 text-sm font-semibold text-[#154212] hover:opacity-70 transition-opacity">Login</Link>
+              <Link to="/signup" className="px-6 py-2.5 bg-primary text-on-primary rounded-full font-semibold text-sm hover:scale-105 transition-transform duration-300 active:scale-95 shadow-lg shadow-primary/10">Sign Up</Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

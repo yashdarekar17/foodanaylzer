@@ -23,6 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
 // API routes
 const foodRoutes = require('./routes/foodroutes');
 app.use('/foods', foodRoutes);
+app.use('/api', foodRoutes);  // Also expose at /api prefix
 
 // Serve uploads folder (Used for images)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

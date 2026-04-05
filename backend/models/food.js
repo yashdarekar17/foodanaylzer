@@ -55,8 +55,18 @@ const foodSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['fruits', 'vegetables', 'grains', 'proteins', 'dairy', 'other'],
+        enum: ['main_course', 'staple', 'street_food', 'fast_food', 'healthy', 'drink', 'sweet', 'protein', 'other'],
         default: 'other'
+    },
+    source: {
+        type: String,
+        enum: ['dataset', 'api', 'ai', 'user'],
+        default: 'user'
+    },
+    tags: [String],
+    estimated: {
+        type: Boolean,
+        default: false
     },
     userId: {
     type: mongoose.Schema.Types.ObjectId,
