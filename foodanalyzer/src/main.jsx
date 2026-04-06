@@ -4,6 +4,10 @@ import './index.css'
 import App from './App.jsx'
 import {Provider} from 'react-redux'
 import store from '../Store/Store.jsx'
+import axios from 'axios';
+
+// Automatically handle switching between localhost and Render URL
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store} >

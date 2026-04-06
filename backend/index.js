@@ -17,8 +17,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Connect DB
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .then(() => {
+    console.log('✅ MongoDB connected successfully to database');
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB Connection Error:', err.message);
+  });
 
 // API routes
 const foodRoutes = require('./routes/foodroutes');
