@@ -56,7 +56,9 @@ const Addfood = () => {
     data.append('userId', userId);
 
     try {
-      const res = await fetch('https://foodanaylzer-1.onrender.com/foods/addfoods', {
+      const rawBase = import.meta.env.VITE_API_URL || "";
+      const apiBase = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
+      const res = await fetch(`${apiBase}/foods/addfoods`, {
         method: 'POST',
         body: data,
       });

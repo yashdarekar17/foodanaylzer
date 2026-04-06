@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("https://foodanaylzer-1.onrender.com/foods/login", {
+      const response = await axios.post("/foods/login", {
         email,
         Password,
       });

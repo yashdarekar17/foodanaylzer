@@ -7,7 +7,9 @@ import store from '../Store/Store.jsx'
 import axios from 'axios';
 
 // Automatically handle switching between localhost and Render URL
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+const rawBase = import.meta.env.VITE_API_URL || "";
+const apiBase = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
+axios.defaults.baseURL = apiBase;
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store} >

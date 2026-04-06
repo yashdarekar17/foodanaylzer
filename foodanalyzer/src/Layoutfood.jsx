@@ -82,7 +82,9 @@ function Layoutfood() {
     try {
       const userId = localStorage.getItem('userId') || null;
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/analyze`, {
+      const rawBase = import.meta.env.VITE_API_URL || "";
+      const apiBase = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
+      const response = await fetch(`${apiBase}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ foodText: term, userId })
