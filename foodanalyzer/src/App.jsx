@@ -21,7 +21,12 @@ function App() {
     const checkProfile = async () => {
       if (userId) {
         try {
-          const res = await axios.get(`/foods/user/${userId}`);
+          const token = localStorage.getItem("token");
+          const res = await axios.get(`/foods/user/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           setIsProfileComplete(res.data.isProfileComplete);
         } catch (err) {
           console.error("Profile check error:", err);
