@@ -29,7 +29,7 @@ const Chatbot = () => {
                     
                     <div className="relative aspect-[4/3] md:aspect-auto md:h-[700px] w-full rounded-2xl md:rounded-[2rem] overflow-hidden bg-surface-container-low border border-outline-variant/20 shadow-inner">
                         <iframe
-                            src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/03/16/20250803165730-FFDU497E.json"
+                            src="https://cdn.botpress.cloud/webchat/v3.6/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/03/16/20250803165730-FFDU497E.json"
                             title="AI Chatbot"
                             className="w-full h-full border-none"
                             allow="microphone"
