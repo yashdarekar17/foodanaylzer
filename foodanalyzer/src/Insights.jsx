@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,6 +35,7 @@ const MacroCard = ({ label, value, unit, icon, colorClass, barColor, total = 100
 // Component removed in favor of direct date selection header
 
 function Insights() {
+    const navigate = useNavigate();
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -49,6 +51,12 @@ function Insights() {
     const [expandedMealId, setExpandedMealId] = useState(null);
     
     const userId = localStorage.getItem("userId");
+
+    useEffect(() => {
+        if (!userId) {
+            navigate('/Login');
+        }
+    }, [userId, navigate]);
 
     const fetchInsights = async (date) => {
         try {

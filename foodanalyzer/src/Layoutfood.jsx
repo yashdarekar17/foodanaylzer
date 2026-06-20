@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import SearchBar from './Searchbar';
@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 function Layoutfood() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [foodData, setFoodData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -74,14 +75,18 @@ function Layoutfood() {
   const handleSearch = async (term) => {
     if (!term.trim()) return;
 
+    const userId = localStorage.getItem('userId') || null;
+    if (!userId) {
+      navigate('/Login');
+      return;
+    }
+
     setSearchTerm(term);
     setLoading(true);
     setError(null);
     setFoodData(null);
 
     try {
-      const userId = localStorage.getItem('userId') || null;
-
       const rawBase = import.meta.env.VITE_API_URL || "";
       const apiBase = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
       const response = await fetch(`${apiBase}/api/analyze`, {
