@@ -75,8 +75,8 @@ function Layoutfood() {
   const handleSearch = async (term) => {
     if (!term.trim()) return;
 
-    const userId = localStorage.getItem('userId') || null;
-    if (!userId) {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
       navigate('/Login');
       return;
     }

@@ -51,12 +51,13 @@ function Insights() {
     const [expandedMealId, setExpandedMealId] = useState(null);
     
     const userId = localStorage.getItem("userId");
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
     useEffect(() => {
-        if (!userId) {
+        if (!isLoggedIn) {
             navigate('/Login');
         }
-    }, [userId, navigate]);
+    }, [isLoggedIn, navigate]);
 
     const fetchInsights = async (date) => {
         try {
