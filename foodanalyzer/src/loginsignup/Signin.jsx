@@ -20,7 +20,7 @@ function Signup() {
         Password,
       });
       console.log("Signup Success:", response.data);
-      navigate('/Login');
+      navigate('/onboarding');
     } catch (err) {
       console.error("Signup Error:", err.response?.data || err.message);
       alert(err.response?.data?.message || "Signup failed");
