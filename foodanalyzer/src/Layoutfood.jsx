@@ -81,6 +81,8 @@ function Layoutfood() {
       return;
     }
 
+    const userId = localStorage.getItem('userId');
+
     setSearchTerm(term);
     setLoading(true);
     setError(null);
