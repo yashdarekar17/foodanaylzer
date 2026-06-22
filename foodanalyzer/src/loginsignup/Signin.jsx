@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { clearItems } from "../../Store/Foodslice";
+import { useDispatch } from "react-redux";
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
@@ -9,6 +11,7 @@ function Signup() {
   const [email, setemail] = useState("");
   const [Password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -20,6 +23,11 @@ function Signup() {
         Password,
       });
       console.log("Signup Success:", response.data);
+      const { user, token } = response.data;
+      localStorage.setItem("userId", user.id);
+      localStorage.setItem("token", token);
+      localStorage.setItem("isLoggedIn", "true");
+      dispatch(clearItems());
       navigate('/onboarding');
     } catch (err) {
       console.error("Signup Error:", err.response?.data || err.message);
