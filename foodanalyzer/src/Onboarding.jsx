@@ -21,7 +21,6 @@ const GOALS = [
 function Onboarding() {
     const navigate = useNavigate();
     const userId = localStorage.getItem("userId");
-    const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     
     const [formData, setFormData] = useState({

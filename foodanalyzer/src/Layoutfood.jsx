@@ -9,7 +9,6 @@ import Footer from './Footer';
 
 function Layoutfood() {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
   const [foodData, setFoodData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -83,7 +82,6 @@ function Layoutfood() {
 
     const userId = localStorage.getItem('userId');
 
-    setSearchTerm(term);
     setLoading(true);
     setError(null);
     setFoodData(null);
@@ -127,7 +125,7 @@ function Layoutfood() {
             >
               <div className="flex-none pt-8 pb-4">
                 <button
-                  onClick={() => { setFoodData(null); setSearchTerm(''); }}
+                  onClick={() => { setFoodData(null); }}
                   className="flex items-center gap-2 text-primary font-bold hover:-translate-x-1 transition-transform bg-surface-container shadow-sm px-5 py-2 rounded-full w-fit border border-surface-container-high text-sm"
                 >
                   <span className="material-symbols-outlined text-lg">arrow_back</span>

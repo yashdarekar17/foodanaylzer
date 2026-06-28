@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -59,7 +59,7 @@ function Insights() {
         }
     }, [isLoggedIn, navigate]);
 
-    const fetchInsights = async (date) => {
+    const fetchInsights = useCallback(async (date) => {
         try {
             const url = date ? `/foods/insights/${userId}?date=${date}` : `/foods/insights/${userId}`;
             const response = await axios.get(url);
@@ -69,16 +69,7 @@ function Insights() {
             console.error("Fetch insights error:", err);
             setError(true);
         }
-    };
-
-    const fetchHistory = async () => {
-        try {
-            const response = await axios.get(`/foods/insights/history/${userId}?weekOffset=${weekOffset}`);
-            setHistory(response.data);
-        } catch (err) {
-            console.error("Fetch history error:", err);
-        }
-    };
+    }, [userId]);
 
     useEffect(() => {
         const loadAll = async () => {
@@ -89,7 +80,7 @@ function Insights() {
             }
         };
         loadAll();
-    }, [userId, selectedDate]);
+    }, [userId, selectedDate, fetchInsights]);
 
     const handleParseMeal = async (e) => {
         e.preventDefault();
@@ -99,7 +90,7 @@ function Insights() {
         try {
             const res = await axios.post('/foods/meals/parse', { text: mealInput, userId });
             setMealPreview(res.data);
-        } catch (err) {
+        } catch {
             alert("Could not parse meal. Please try again.");
         } finally {
             setIsParsing(false);
@@ -122,7 +113,7 @@ function Insights() {
             setMealPreview(null);
             setMealInput("");
             fetchInsights(); // Refresh dashboard
-        } catch (err) {
+        } catch {
             alert("Error saving meal.");
         } finally {
             setIsSaving(false);

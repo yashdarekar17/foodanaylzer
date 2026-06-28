@@ -66,13 +66,6 @@ function Profile() {
     setIsEditing(false);
   };
 
-  const toggleCondition = (val) => {
-    setConditions(prev =>
-      prev.includes(val) ? prev.filter(c => c !== val) : [...prev, val]
-    );
-    setHealthSaved(false);
-  };
-
   const saveHealthProfile = async () => {
     setHealthSaving(true);
     try {

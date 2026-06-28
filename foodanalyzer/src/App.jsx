@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import axios from "axios";
 
@@ -15,19 +15,17 @@ import Onboarding from "./Onboarding";
 
 function App() {
   const userId = localStorage.getItem("userId");
-  const [isProfileComplete, setIsProfileComplete] = useState(true);
 
   useEffect(() => {
     const checkProfile = async () => {
       if (userId) {
         try {
           const token = localStorage.getItem("token");
-          const res = await axios.get(`/foods/user/${userId}`, {
+          await axios.get(`/foods/user/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setIsProfileComplete(res.data.isProfileComplete);
         } catch (err) {
           console.error("Profile check error:", err);
         }
