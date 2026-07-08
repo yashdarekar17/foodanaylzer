@@ -5,6 +5,7 @@ import profileuser from "./foodimage/profileuser.png";
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,11 +68,100 @@ function Navbar() {
           ) : (
             <>
               <Link to="/Login" className="hidden md:block px-6 py-2.5 text-sm font-semibold text-[#154212] hover:opacity-70 transition-opacity">Login</Link>
-              <Link to="/signup" className="px-6 py-2.5 bg-primary text-on-primary rounded-full font-semibold text-sm hover:scale-105 transition-transform duration-300 active:scale-95 shadow-lg shadow-primary/10">Sign Up</Link>
+              <Link to="/signup" className="hidden md:block px-6 py-2.5 bg-primary text-on-primary rounded-full font-semibold text-sm hover:scale-105 transition-transform duration-300 active:scale-95 shadow-lg shadow-primary/10">Sign Up</Link>
             </>
           )}
+
+          {/* Hamburger button (visible on mobile only) */}
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="md:hidden flex items-center justify-center p-2 text-[#154212] hover:bg-[#154212]/5 rounded-full transition-all active:scale-95"
+            aria-label="Toggle Menu"
+          >
+            <span className="material-symbols-outlined text-2xl">
+              {showMobileMenu ? "close" : "menu"}
+            </span>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {showMobileMenu && (
+        <div className="md:hidden absolute top-[100%] left-0 w-full bg-[#f9faf6] border-t border-[#c2c9bb]/20 shadow-lg px-8 py-6 flex flex-col gap-6 animate-fade-in">
+          <div className="flex flex-col gap-4">
+            {[
+              { path: "/", label: "Home" },
+              { path: "/About", label: "About" },
+              { path: "/Contact", label: "Contact" },
+              { path: "/insights", label: "Insights" }
+            ].map((link) => (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                onClick={() => setShowMobileMenu(false)}
+                className={({ isActive }) =>
+                  `text-lg font-semibold transition-colors ${isActive
+                    ? "text-[#154212]"
+                    : "text-[#42493e] hover:text-[#154212]"
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </div>
+
+          <div className="border-t border-[#c2c9bb]/30 pt-4 flex flex-col gap-3">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to="/profile"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="flex items-center gap-3 text-lg font-semibold text-[#42493e] hover:text-[#154212]"
+                >
+                  <span className="material-symbols-outlined">person</span>
+                  Profile
+                </Link>
+                <Link
+                  to="/bot"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="flex items-center gap-3 text-lg font-semibold text-[#42493e] hover:text-[#154212]"
+                >
+                  <span className="material-symbols-outlined">smart_toy</span>
+                  Nutribot
+                </Link>
+                <button
+                  onClick={() => {
+                    setShowMobileMenu(false);
+                    handleLogout();
+                  }}
+                  className="flex items-center gap-3 text-lg font-semibold text-error text-left w-full"
+                >
+                  <span className="material-symbols-outlined">logout</span>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/Login"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full text-center py-3 text-base font-semibold text-[#154212] border border-[#154212]/20 rounded-full hover:bg-[#154212]/5 transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full text-center py-3 bg-primary text-on-primary rounded-full font-semibold text-base shadow-lg shadow-primary/10 hover:opacity-90 active:scale-95 transition-transform"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
