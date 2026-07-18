@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-61dafb?style=flat&logo=react)](https://react.dev/)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20%7C%20Express-339933?style=flat&logo=node.js)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47a248?style=flat&logo=mongodb)](https://www.mongodb.com/)
-[![Groq AI](https://img.shields.io/badge/AI-Groq%20%7C%20Llama%203.3-orange?style=flat)](https://groq.com/)
+[![Groq AI](https://img.shields.io/badge/AI-Groq%20%7C%20openai/gpt-oss-120b%203.3-orange?style=flat)](https://groq.com/)
 
 **NutriScan** is a health and nutrition analysis platform. It empowers users to make informed dietary decisions through natural language food analysis, condition-aware risk scoring, automated calorie and macro logging, and a personalized AI health coach.
 
@@ -52,7 +52,7 @@ graph TD
     E -- Match Found --> D
     E -- No Match --> F{3. Check Spoonacular API}
     F -- API Success --> G[Cache in MongoDB & Return]
-    F -- API Fail/Null --> H[4. Estimate with Groq AI Llama-3.3]
+    F -- API Fail/Null --> H[4. Estimate with Groq AI openai/gpt-oss-120b]
     H --> G
 ```
 
