@@ -28,14 +28,13 @@ function lookupInDataset(foodName) {
 }
 
 /**
- * TIER 2: Look up food in MongoDB cache (previously AI/API results).
+ * TIER 2: Look up food in MongoDB cache (seeded, user, AI, or API results).
  */
 async function lookupInCache(foodName) {
   try {
     const query = new RegExp(`^${foodName.trim()}$`, 'i');
     const cached = await Food.findOne({
-      name: { $regex: query },
-      source: { $in: ['ai', 'api'] }
+      name: { $regex: query }
     });
 
     if (!cached) return null;
