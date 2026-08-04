@@ -20,16 +20,7 @@ const riskStyle = (status) => {
   return { text: 'text-primary', bg: 'bg-primary-container/60', bar: 'bg-primary', Icon: ShieldCheck };
 };
 
-const sourceLabel = {
-  dataset: { text: 'Verified Dataset', color: 'bg-primary/10 text-primary' },
-  api: { text: 'External API', color: 'bg-secondary/10 text-secondary' },
-  ai: { text: 'AI Estimated', color: 'bg-tertiary/10 text-tertiary' },
-  user: { text: 'User Added', color: 'bg-surface-container text-on-surface-variant' },
-};
-
-// ── Main Component ─────────────────────────────────────────────
 function FoodDetails({ food }) {
-  const src = sourceLabel[food.source] || sourceLabel.user;
   const carbs = food.carbohydrates ?? food.carbs ?? 0;
   const risk = riskStyle(food.status);
   const RiskIcon = risk.Icon;
@@ -45,21 +36,13 @@ function FoodDetails({ food }) {
         <h2 className="text-5xl font-heading font-black tracking-tight leading-tight capitalize">
           {food.food || food.name}
         </h2>
-        <div className="flex flex-wrap gap-2">
-          <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${src.color}`}>
-            {src.text}
-          </span>
-          {food.estimated && (
-            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-tertiary/10 text-tertiary">
-              Estimated
-            </span>
-          )}
-          {food.quantity > 1 && (
+        {food.quantity > 1 && (
+          <div className="flex flex-wrap gap-2">
             <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-surface-container text-on-surface-variant">
               ×{food.quantity} servings
             </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* ── High-Level Summary: Macros & Risk ─────────────── */}
