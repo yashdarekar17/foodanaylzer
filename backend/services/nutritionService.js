@@ -51,9 +51,9 @@ async function lookupInCache(foodName) {
 }
 
 /**
- * TIER 3: Fetch from Spoonacular API and normalize.
+ * TIER 3: Fetch from Spoonacular API, normalize, and save to MongoDB.
  */
-async function lookupFromSpoonacular(foodName) {
+async function lookupFromSpoonacular(foodName, userId = null) {
   try {
     const apiKey = process.env.SPOONACULAR_API;
     const url = `https://api.spoonacular.com/recipes/guessNutrition?title=${encodeURIComponent(foodName)}&apiKey=${apiKey}`;
@@ -77,7 +77,18 @@ async function lookupFromSpoonacular(foodName) {
       source: 'api'
     };
 
-    return normalizeFoodData(raw, 'api');
+    const normalized = normalizeFoodData(raw, 'api');
+
+    // Cache the Spoonacular API result to MongoDB for future lookups
+    const existingCache = await Food.findOne({ name: new RegExp(`^${foodName.trim()}$`, 'i') });
+    if (!existingCache) {
+      await Food.create({
+        ...normalized,
+        userId: userId || null
+      });
+    }
+
+    return normalized;
   } catch (err) {
     console.error("Spoonacular API error:", err.message);
     return null;
@@ -135,7 +146,7 @@ async function getNutrition(foodName, userId = null) {
   }
 
   // Tier 3: Spoonacular API
-  const fromSpoonacular = await lookupFromSpoonacular(foodName);
+  const fromSpoonacular = await lookupFromSpoonacular(foodName, userId);
   if (fromSpoonacular) {
     console.log(`[NutritionService] Found via Spoonacular API`);
     return fromSpoonacular;
