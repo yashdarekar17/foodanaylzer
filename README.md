@@ -194,8 +194,3 @@ Every push or pull request to the `main` branch triggers:
     *   Node environment setup.
     *   Dependency installation (`npm install`).
 
----
-
-## 📄 License
-
-This project is licensed under the **ISC License**. See the `package.json` for details.
