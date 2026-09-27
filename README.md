@@ -1,7 +1,6 @@
 # 🥗 NutriScan — Smart Food Analyzer & Nutrition Coach
 
 [![FoodAnalyzer CI](https://github.com/yashdarekar17/foodanaylzer/actions/workflows/main.yml/badge.svg)](https://github.com/yashdarekar17/foodanaylzer/actions/workflows/main.yml)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![React](https://img.shields.io/badge/Frontend-React%20%7C%20Vite-61dafb?style=flat&logo=react)](https://react.dev/)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20%7C%20Express-339933?style=flat&logo=node.js)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-47a248?style=flat&logo=mongodb)](https://www.mongodb.com/)
