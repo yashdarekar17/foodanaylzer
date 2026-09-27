@@ -157,6 +157,20 @@ router.get('/user/:id', jwtauthentication, async (req, res) => {
   }
 });
 
+// GET food search history (from FoodLog) for a user
+router.get('/user-activity/:userId', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 20;
+    const logs = await FoodLog.find({ userId: req.params.userId })
+      .sort({ date: -1 })
+      .limit(limit)
+      .lean();
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 
 // PATCH update user health profile (goal + conditions)
@@ -772,7 +786,6 @@ router.post('/analyze', async (req, res) => {
     };
 
     // STEP 8: Automatic Food Logging (DISABLED: Only AI Quick Add meals are logged now)
-    /*
     if (userId) {
       try {
         await FoodLog.create({
@@ -788,7 +801,7 @@ router.post('/analyze', async (req, res) => {
         console.error('Auto-logging error:', logErr.message);
       }
     }
-    */
+
 
     res.json(response);
   } catch (err) {

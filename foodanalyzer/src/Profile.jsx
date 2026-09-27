@@ -29,6 +29,8 @@ function Profile() {
   const [conditions, setConditions] = useState([]);
   const [healthSaving, setHealthSaving] = useState(false);
   const [healthSaved, setHealthSaved] = useState(false);
+  const [activityLogs, setActivityLogs] = useState([]);
+  const [activityLoading, setActivityLoading] = useState(false);
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
@@ -54,6 +56,25 @@ function Profile() {
       fetchUser();
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (activeTab !== 'activity' || !userId) return;
+    const fetchActivity = async () => {
+      setActivityLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`/foods/user-activity/${userId}?limit=20`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setActivityLogs(res.data);
+      } catch (err) {
+        console.error("Activity fetch error:", err.message);
+      } finally {
+        setActivityLoading(false);
+      }
+    };
+    fetchActivity();
+  }, [activeTab, userId]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -181,7 +202,7 @@ function Profile() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           <StatCard
             title="Foods Analyzed"
-            value={user?.foods?.length || 0}
+            value={activityLogs.length || 0}
             icon="query_stats"
             colorClass="bg-secondary-container/50 text-on-secondary-container"
           />
@@ -357,30 +378,56 @@ function Profile() {
 
 
               {activeTab === 'activity' && (
-                <div className="space-y-8">
-                  <h3 className="text-2xl font-heading font-bold mb-6">Recent Activity</h3>
-                  {user.foods && user.foods.length > 0 ? (
-                    <div className="space-y-4">
-                      {user.foods.slice(0, 5).map((food, index) => (
-                        <div key={index} className="flex items-center justify-between p-6 bg-surface-container rounded-2xl hover:bg-surface-container-high transition-colors">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
-                              <span className="material-symbols-outlined">tapas</span>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-heading font-bold">Recent Food Searches</h3>
+                    {activityLogs.length > 0 && (
+                      <span className="text-xs font-bold text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">
+                        {activityLogs.length} total
+                      </span>
+                    )}
+                  </div>
+
+                  {activityLoading ? (
+                    <div className="flex justify-center py-16">
+                      <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                    </div>
+                  ) : activityLogs.length > 0 ? (
+                    <div className="space-y-3">
+                      {activityLogs.map((log, index) => {
+                        const logDate = new Date(log.date);
+                        const formattedDate = logDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                        const formattedTime = logDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        return (
+                          <div key={log._id || index} className="flex items-center justify-between p-5 bg-surface-container rounded-2xl hover:bg-surface-container-high transition-colors group">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <span className="material-symbols-outlined text-[22px]">nutrition</span>
+                              </div>
+                              <div>
+                                <p className="font-bold capitalize">{log.foodName}</p>
+                                <div className="flex items-center gap-3 mt-0.5">
+                                  <span className="text-xs font-bold text-primary">{log.calories} kcal</span>
+                                  <span className="text-xs text-on-surface-variant">P: {log.protein}g</span>
+                                  <span className="text-xs text-on-surface-variant">F: {log.fat}g</span>
+                                  <span className="text-xs text-on-surface-variant">C: {log.carbohydrates}g</span>
+                                </div>
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-bold">Analyzed Food Item</p>
-                              <p className="text-sm text-on-surface-variant">Viewed nutritional breakdown</p>
+                            <div className="text-right shrink-0">
+                              <p className="text-xs font-bold text-on-surface-variant">{formattedDate}</p>
+                              <p className="text-xs text-on-surface-variant/60">{formattedTime}</p>
                             </div>
                           </div>
-                          <button className="text-primary font-bold text-sm bg-primary/10 px-4 py-2 rounded-full">View</button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="text-center py-16 text-on-surface-variant">
-                      <span className="material-symbols-outlined text-6xl mb-4 opacity-50">hourglass_empty</span>
-                      <p className="text-lg font-medium">No recent activity yet.</p>
-                      <button onClick={() => navigate('/')} className="mt-4 px-6 py-2 bg-primary text-on-primary rounded-full font-bold">Start Scanning</button>
+                      <span className="material-symbols-outlined text-6xl mb-4 opacity-50">manage_search</span>
+                      <p className="text-lg font-medium">No food searches yet.</p>
+                      <p className="text-sm mt-1 mb-4">Your food analyzer searches will appear here.</p>
+                      <button onClick={() => navigate('/')} className="mt-2 px-6 py-2 bg-primary text-on-primary rounded-full font-bold">Start Analyzing</button>
                     </div>
                   )}
                 </div>
